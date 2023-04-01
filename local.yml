@@ -1,0 +1,58 @@
+version: '3'
+
+volumes:
+  links_django_app_local_postgres_data: {}
+  links_django_app_local_postgres_data_backups: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: links_django_app_local_django
+    container_name: links_django_app_local_django
+    depends_on:
+      - postgres
+      - mailhog
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: links_django_app_production_postgres
+    container_name: links_django_app_local_postgres
+    volumes:
+      - links_django_app_local_postgres_data:/var/lib/postgresql/data
+      - links_django_app_local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: links_django_app_local_docs
+    container_name: links_django_app_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./links_django_app:/app/links_django_app:z
+    ports:
+      - "9000:9000"
+    command: /start-docs
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: links_django_app_local_mailhog
+    ports:
+      - "8025:8025"
