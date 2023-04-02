@@ -11,3 +11,35 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+body,
+html {
+  height: 100%;
+  color: silver;
+}
+
+div.container-fluid {
+  background-color: azure;
+  color: midnightblue;
+  opacity: 0.85;
+  width: 70%;
+}
+
+div.container {
+  background-color: black;
+  color: silver;
+  opacity: 0.85;
+  width: 70%;
+}
+
+
+body {
+  background: url("./images/bg.png");
+  opacity: 1;
+  height: 100%;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
