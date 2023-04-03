@@ -1,5 +1,5 @@
 import time
-from django.db import IntegrityError, DatabaseError, transaction
+from django.db import IntegrityError, DatabaseError, OperationalError, transaction
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -20,19 +20,30 @@ class LinkCreateView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+            new_link = None
             succeed = False
-            while not succeed:
-                try:
-                    with transaction.atomic():
-                        new_link = form.save()
-                        succeed = True
-                except IntegrityError:
-                    messages.error(request, "Sorry, we couldn't process your request because of a server error. Please \
-                    try again later or contact our support team if the problem persists.")
-                    return render(request, self.template_name, {'form': form})
-            succeed = None
+            try:
+                with transaction.atomic():
+                    new_link = form.save()
+            except (IntegrityError, DatabaseError, OperationalError):
+                transaction.rollback()
+                count = 0
+                while not succeed:
+                    try:
+                        time.sleep(10)
+                        with transaction.atomic():
+                            new_link = form.save()
+                    except (IntegrityError, DatabaseError, OperationalError):
+                        transaction.rollback()
+                        count = count + 1
+                        if count > 6:
+                            new_link = None
+                            succeed = True
+            if new_link is None:
+                messages.error(request, "Sorry, we couldn't process your request because of a server error. Please \
+                try again later.")
+                return render(request, self.template_name, {'form': form})
             return redirect(f'/links/show/{new_link.pk}')
-        return render(request, self.template_name, {'form': form})
 
 
 class LinkShowView(View):
@@ -52,3 +63,5 @@ class LinkShowView(View):
         context = {'link': link}
         return render(request, self.template_name, context)
 
+class LinkModifyView(View):
+    template_name = 'link/link_modify.html'
