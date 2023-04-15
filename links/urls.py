@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import LinkCreateView, LinkShowView
+from .views import LinkCreateView, LinkModifyView, SearchResultsList, LinkList
 
 app_name = "links"
 
 urlpatterns = [
+    path("", LinkList.as_view(), name="all_links"),
+    path("search/", SearchResultsList.as_view(), name="search_results"),
     path("create/",  LinkCreateView.as_view(), name="link-create"),
-    path('show/<uuid:lid>',  LinkShowView.as_view(), name="link-show"),
+    path('modify/<uuid:lid>',  LinkModifyView.as_view(), name="link-modify"),
 ]

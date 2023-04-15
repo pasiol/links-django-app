@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <br><br>
+    <h1>Links</h1>
+    <br><br>
+    <form action="{% url 'links:search_results' %}" method="get">
+      <input type="search" name="q" placeholder="Search by description..." class="form-control">
+    </form>
+    <br><br>
+    <p><a href="{% url 'links:link-create' %}">Add a new link</a></p>
+    <br>
+    <table class="table-dark table-bordered">
+    <thead>
+      <th scope="col">type</th>
+      <th scope="col">URL</th>
+      <th scope="col">description</th>
+      <th scope="col">action</th>
+    </thead>
+    {% for link in links %}
+      <tbody>
+        <tr>
+          <td><b>{{ link.type }}</b></td>
+          <td><a href="{{ link.url }}" target="_blank">{{ link.url }}</a></td>
+          <td>{{ link.description }}</td>
+          <td><a href="{% url 'links:link-modify' lid=link.id %}">Modify</a></td>
+        </tr>
+    {% empty %}
+      <p>The database is empty. Add some links.</p>
+    {% endfor %}
+    </table>
+    <br><br>
+  </div>
+{% endblock %}

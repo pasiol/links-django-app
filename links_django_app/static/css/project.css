@@ -26,15 +26,23 @@ div.container-fluid {
 }
 
 div.container {
+  color: antiquewhite;
   background-color: black;
-  color: silver;
-  opacity: 0.85;
-  width: 70%;
+  width: 100%;
 }
 
+table {
+  color: antiquewhite;
+}
+
+#background {
+
+  opacity: 0.92;
+  width: 100%;
+}
 
 body {
-  background: url("./images/bg.png");
+  background: url("./images/bg.jpg");
   opacity: 1;
   height: 100%;
   background-position: center;
