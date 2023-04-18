@@ -18,6 +18,7 @@ urlpatterns = [
     path("users/", include("links_django_app.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("links/", include("links.urls", namespace="links")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

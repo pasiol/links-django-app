@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h2>Modify link</h2>
+  <p>{{ form.url.value }}</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input type="submit" value="Modify">
+  </form>
+{% endblock %}
