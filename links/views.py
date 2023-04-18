@@ -117,7 +117,7 @@ class LinkModifyView(View):
                         count = count + 1
                         if count > 6:
                             giving_up = True
-            return redirect(f"/links/")
+            return redirect("/links/")
 
 
 @method_decorator(cache_page(60 * 5), name="dispatch")
