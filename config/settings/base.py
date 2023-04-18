@@ -64,7 +64,7 @@ DJANGO_APPS = [
     "django.forms",
     "links",
     "django_filters",
-    "django.contrib.postgres"
+    "django.contrib.postgres",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
