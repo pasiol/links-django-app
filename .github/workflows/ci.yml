@@ -45,24 +45,12 @@ jobs:
 
       - name: Build the Stack
         run:  docker-compose -f local.yml build
-        env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
       - name: Run DB Migrations
         run:  docker-compose -f local.yml run --rm django python manage.py migrate
-        env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
       - name: Run Django Tests
         run:  docker-compose -f local.yml run django pytest
-        env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
       - name: Tear down the Stack
         run:  docker-compose -f local.yml down
